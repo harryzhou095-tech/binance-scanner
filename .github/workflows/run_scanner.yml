@@ -1,0 +1,26 @@
+name: Binance EMA Scanner
+
+on:
+  schedule:
+    # 每天每小时的第 2 分钟自动运行 (UTC 时间 0 * * * * 代表每小时，K线刚好收盘闭合)
+    - cron: '2 * * * *'
+  workflow_dispatch: # 允许你随时在手机上手动点击运行测试
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🐋 下载代码
+      uses: actions/checkout@v3
+
+    - name: 🐍 启动云端 Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 📦 安装量化计算库
+      run: |
+        pip install ccxt pandas pandas_ta requests
+
+    - name: 🚀 执行扫描脚本
+      run: python scanner.py
